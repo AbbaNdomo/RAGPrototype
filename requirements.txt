@@ -1,0 +1,17 @@
+python-dotenv
+
+langchain
+langchain-community
+langchain-groq
+langchain-google-genai
+langchain-chroma
+langgraph
+langchainhub
+
+llama-index
+llama-parse
+
+unstructured[all-docs]
+streamlit
+icecream
+chainlit
