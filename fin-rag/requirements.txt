@@ -1,0 +1,17 @@
+nltk
+chainlit==0.7.501
+tiktoken
+chromadb
+loguru
+# pysqlite3-binary # uncomment if python < 3.10
+pdfplumber
+icecream
+
+langchain
+langchain-community
+langchain-chroma
+langchain-google-genai # Google Gemini
+langchain-groq # Groq
+
+llama-index
+llama-parse
