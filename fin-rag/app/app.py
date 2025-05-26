@@ -407,34 +407,27 @@ async def main(message: cl.Message):
 
 
 if __name__ == "__main__":
-    # set up parser
+    # Dynamically resolve absolute path to the knowledge directory
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    KNOWLEDGE_DIR = os.path.join(BASE_DIR, 'knowledge')
+
+    # Get all PDF files in the directory
+    pdf_files = glob.glob(os.path.join(KNOWLEDGE_DIR, '*.pdf'))
+
+    if not pdf_files:
+        raise FileNotFoundError("No PDF files found in the 'knowledge' directory.")
+
+    # Set up parser
     parser = LlamaParse(
         result_type="markdown",
         parsing_instructions=PARSING_INSTRUCTIONS,
     )
-
-    # use SimpleDirectoryReader to parse our file
     file_extractor = {".pdf": parser}
+
+    # Load documents
     documents = SimpleDirectoryReader(
-                    input_files=['knowledge/apple_10k_nov_2023.pdf'],
-                    file_extractor=file_extractor
-                ).load_data()
-    
-    print(len(documents))
+        input_files=pdf_files,
+        file_extractor=file_extractor
+    ).load_data()
 
-    # from langchain_community.document_loaders import TextLoader, DirectoryLoader
-
-    # loader = DirectoryLoader('knowledge', use_multithreading=True, show_progress=True, glob="**/*.md")
-    # docs = loader.load()
-
-    # print(len(docs))
-    # print(docs[0])
-
-    # # do process files, change env var reset chroma, do process files again and see difference in document parsing
-    # with open('test-1.txt', encoding='utf-8', mode='w') as text_file1:
-    #     text_file1.write(str(process_file()))
-
-    # os.environ['RESET_CHROMA'] = 'True'
-    
-    # with open('test-2.txt', encoding='utf-8', mode='w') as text_file2:
-    #     text_file2.write(str(process_file()))
+    print(f"Loaded {len(documents)} document(s)")
