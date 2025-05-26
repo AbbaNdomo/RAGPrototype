@@ -1,14 +1,18 @@
-# Core app
+# Streamlit app
 streamlit>=1.24.0
 nest_asyncio
 python-dotenv
-pysqlite3-binary          # for sqlite on Python ≥3.10
-chromadb                  # persistent vector DB
-pdfplumber                # PDF extraction (used by llama-parse)
 
-# LangChain & related
+# SQLite shim
+pysqlite3-binary
+
+# PDF parsing & vector DB
+pdfplumber
+chromadb
+
+# LangChain & friends
 langchain
-langchain-core            # for langchain_core.messages
+langchain-core
 langchain-community
 langchain-chroma
 langchain-google-genai
@@ -18,5 +22,8 @@ langchain-groq
 llama-index
 llama-parse
 
-# Tokenizers (pulled in by some embeddings/LLM code)
+# Tokenizers
 tiktoken
+
+# Force an older Protobuf runtime for compatibility
+protobuf<4.21.0
