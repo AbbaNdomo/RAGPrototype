@@ -1,11 +1,11 @@
 # next 3 lines for python <3.10, else uncomment
-# __import__('pysqlite3')
-# import sys
-# sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+__import__('pysqlite3')
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
-# nltk data
-# import nltk
-# nltk.download('averaged_perceptron_tagger')
+#import nltk
+#nltk.download('averaged_perceptron_tagger')
+#nltk data
 
 import os
 import glob
