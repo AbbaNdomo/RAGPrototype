@@ -92,6 +92,7 @@ def load_documents():
 
     st.success(f"Loaded and split {len(split_docs)} document chunks.")
     return split_docs
+
 @st.cache_resource
 def build_vector_store(_docs):
     docs = _docs  # re-bind to your old name

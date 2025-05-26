@@ -1,16 +1,22 @@
-nltk
-chainlit==0.7.501
-tiktoken
-chromadb
-loguru
-# pysqlite3-binary # uncomment if python < 3.10
-pdfplumber
-icecream
-python_dotenv
+# Core app
+streamlit>=1.24.0
+nest_asyncio
+python-dotenv
+pysqlite3-binary          # for sqlite on Python ≥3.10
+chromadb                  # persistent vector DB
+pdfplumber                # PDF extraction (used by llama-parse)
+
+# LangChain & related
 langchain
+langchain-core            # for langchain_core.messages
 langchain-community
 langchain-chroma
 langchain-google-genai
 langchain-groq
+
+# Indexing/parsing
 llama-index
 llama-parse
+
+# Tokenizers (pulled in by some embeddings/LLM code)
+tiktoken
