@@ -406,28 +406,32 @@ async def main(message: cl.Message):
 #         ]
 
 
+import asyncio
+
 if __name__ == "__main__":
-    # Dynamically resolve absolute path to the knowledge directory
+    from llama_parse import LlamaParse
+    from llama_index.core import SimpleDirectoryReader
+
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     KNOWLEDGE_DIR = os.path.join(BASE_DIR, 'knowledge')
 
-    # Get all PDF files in the directory
     pdf_files = glob.glob(os.path.join(KNOWLEDGE_DIR, '*.pdf'))
-
     if not pdf_files:
         raise FileNotFoundError("No PDF files found in the 'knowledge' directory.")
 
-    # Set up parser
     parser = LlamaParse(
         result_type="markdown",
         parsing_instructions=PARSING_INSTRUCTIONS,
     )
+
     file_extractor = {".pdf": parser}
 
-    # Load documents
-    documents = SimpleDirectoryReader(
-        input_files=pdf_files,
-        file_extractor=file_extractor
-    ).load_data()
+    async def parse_files():
+        documents = await SimpleDirectoryReader(
+            input_files=pdf_files,
+            file_extractor=file_extractor
+        ).aload_data()  # ✅ use `aload_data` for async
+        print(f"Loaded {len(documents)} document(s)")
 
-    print(f"Loaded {len(documents)} document(s)")
+    asyncio.run(parse_files())
+
