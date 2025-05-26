@@ -6,7 +6,7 @@ loguru
 # pysqlite3-binary # uncomment if python < 3.10
 pdfplumber
 icecream
-
+python-dotenv
 langchain
 langchain-community
 langchain-chroma
