@@ -10,8 +10,7 @@ python-dotenv
 langchain
 langchain-community
 langchain-chroma
-langchain-google-genai # Google Gemini
-langchain-groq # Groq
-
+langchain-google-genai
+langchain-groq
 llama-index
 llama-parse
