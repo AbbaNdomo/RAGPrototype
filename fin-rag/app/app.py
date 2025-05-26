@@ -1,7 +1,7 @@
-# next 3 lines for python <3.10, else uncomment
-__import__('pysqlite3')
-import sys
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+# next 3 lines for python <3.10, else comment
+#__import__('pysqlite3')
+#import sys
+#sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 #import nltk
 #nltk.download('averaged_perceptron_tagger')
@@ -17,8 +17,7 @@ import chainlit as cl
 from chainlit.input_widget import Select, Switch, Slider
 
 from loguru import logger
-import chromadb
-from chromadb.config import Settings
+#from chromadb.config import Settings
 import uuid
 from icecream import ic
 
@@ -26,7 +25,7 @@ from langchain.chains import RetrievalQAWithSourcesChain
 from langchain.retrievers.multi_query import MultiQueryRetriever
 from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 from langchain_groq import ChatGroq
-from langchain_chroma import Chroma
+#from langchain_chroma import Chroma
 # from langchain_core.messages import AIMessage, HumanMessage, get_buffer_string
 # from langchain_core.prompts import format_document
 # from langchain_core.runnables import RunnableParallel, RunnablePassthrough, RunnableLambda
@@ -162,6 +161,9 @@ def process_file() -> list:
 
 def create_search_engine() -> VectorStore:    
     # Process and save data in the user session
+    import chromadb
+    from chromadb.config import Settings
+    from langchain_chroma import Chroma
     docs = process_file()
 
     logger.info("Creating search engine.")
@@ -171,13 +173,15 @@ def create_search_engine() -> VectorStore:
 
     logger.info("Setting up vector store")
     # Initialize Chromadb client and settings, reset to ensure we get a clean search engine    
-    client = chromadb.PersistentClient(path=PERSIST_DIRECTORY)  
-    client_settings = Settings(        
-        allow_reset=True,        
+    client_settings = Settings(
+        chroma_db_impl="duckdb+parquet",
+        persist_directory=PERSIST_DIRECTORY,
+        allow_reset=True,
         anonymized_telemetry=False,
         is_persistent=True,
-    )    
+    )
 
+    client = chromadb.PersistentClient(settings=client_settings)  # ✅ Use the settings here!
     if not ic(os.path.exists(PERSIST_DIRECTORY)) or ic(os.getenv('RESET_CHROMA') != 'False') or ic(os.getenv('INCREMENTAL_DB_UPDATE') != 'False'):
         logger.warning("Resetting Chroma DB.")
 
@@ -193,8 +197,7 @@ def create_search_engine() -> VectorStore:
         search_engine = Chroma.from_documents(        
             client=client,        
             documents=unique_docs,        
-            embedding=encoder,        
-            client_settings=client_settings,
+            embedding=encoder,
             ids=unique_ids,
             )
         
@@ -206,7 +209,6 @@ def create_search_engine() -> VectorStore:
             persist_directory=PERSIST_DIRECTORY, 
             embedding_function=encoder,
             client=client,
-            client_settings=client_settings,
             )
         
         logger.info("Search engine created from cache.")
